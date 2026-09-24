@@ -38,6 +38,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Colorable;
 
 import net.coreprotect.bukkit.BukkitAdapter;
 import net.coreprotect.consumer.Queue;
@@ -136,6 +137,30 @@ public class RollbackBlockHandler extends Queue {
                         PaperAdapter.ADAPTER.teleportAsync(entity, location1);
                     }
                 }
+                else if (EntityUtils.isCushion(rowType)) { // cushion (Minecraft 26.3+)
+                    Location location1 = block.getLocation();
+                    location1.setX(location1.getX() + 0.50);
+                    location1.setZ(location1.getZ() + 0.50);
+                    location1.setYaw(rowData);
+                    boolean exists = false;
+
+                    for (Entity entity : block.getChunk().getEntities()) {
+                        if (EntityUtils.isCushion(entity)) {
+                            if (entity.getLocation().getBlockX() == location1.getBlockX() && entity.getLocation().getBlockY() == location1.getBlockY() && entity.getLocation().getBlockZ() == location1.getBlockZ()) {
+                                exists = true;
+                            }
+                        }
+                    }
+
+                    if (!exists) {
+                        Entity entity = block.getLocation().getWorld().spawnEntity(location1, BukkitAdapter.ADAPTER.getEntityType(rowType));
+                        DyeColor cushionColor = EntityUtils.getCushionColor(rowType);
+                        if (cushionColor != null && entity instanceof Colorable) {
+                            ((Colorable) entity).setColor(cushionColor);
+                        }
+                        PaperAdapter.ADAPTER.teleportAsync(entity, location1);
+                    }
+                }
                 else if ((rowType == Material.AIR) && ((oldTypeMaterial == Material.WATER))) {
                     if (pendingChangeData instanceof Waterlogged) {
                         Waterlogged waterlogged = (Waterlogged) pendingChangeData;
@@ -155,6 +180,15 @@ public class RollbackBlockHandler extends Queue {
                 else if ((rowType == Material.AIR) && ((oldTypeMaterial == Material.END_CRYSTAL))) {
                     for (Entity entity : block.getChunk().getEntities()) {
                         if (entity instanceof EnderCrystal) {
+                            if (entity.getLocation().getBlockX() == rowX && entity.getLocation().getBlockY() == rowY && entity.getLocation().getBlockZ() == rowZ) {
+                                entity.remove();
+                            }
+                        }
+                    }
+                }
+                else if ((rowType == Material.AIR) && (EntityUtils.isCushion(oldTypeMaterial))) { // cushion (Minecraft 26.3+)
+                    for (Entity entity : block.getChunk().getEntities()) {
+                        if (EntityUtils.isCushion(entity)) {
                             if (entity.getLocation().getBlockX() == rowX && entity.getLocation().getBlockY() == rowY && entity.getLocation().getBlockZ() == rowZ) {
                                 entity.remove();
                             }

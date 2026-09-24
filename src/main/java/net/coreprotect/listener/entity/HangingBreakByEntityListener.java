@@ -38,7 +38,7 @@ public final class HangingBreakByEntityListener extends Queue implements Listene
         inspectEntity(block, player, null);
     }
 
-    static void inspectEntity(final BlockState block, final Player player, final UUID entityUuid) {
+    public static void inspectEntity(final BlockState block, final Player player, final UUID entityUuid) {
         // block check
         if (!player.hasPermission("coreprotect.inspect")) {
             Chat.sendMessage(player, Color.DARK_AQUA + "CoreProtect " + Color.WHITE + "- " + Phrase.build(Phrase.NO_PERMISSION));

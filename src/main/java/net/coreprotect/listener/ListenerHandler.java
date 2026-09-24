@@ -96,6 +96,14 @@ public final class ListenerHandler {
             // Ignore registration failures to remain compatible with older servers.
         }
 
+        try {
+            Class.forName("io.papermc.paper.event.entity.EntityBreakEvent"); // Paper 26.3+
+            pluginManager.registerEvents(new CushionListener(), plugin);
+        }
+        catch (Exception e) {
+            // Ignore registration failures to remain compatible with older servers.
+        }
+
         // Block Listeners
         pluginManager.registerEvents(new BlockBreakListener(), plugin);
         pluginManager.registerEvents(new BlockBurnListener(), plugin);
