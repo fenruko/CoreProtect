@@ -37,6 +37,7 @@ import net.coreprotect.model.PendingBlockChange;
 import net.coreprotect.model.item.ItemTransactionActions;
 import net.coreprotect.thread.Scheduler;
 import net.coreprotect.utility.BlockUtils;
+import net.coreprotect.utility.EntityUtils;
 import net.coreprotect.utility.ItemUtils;
 import net.coreprotect.utility.MaterialUtils;
 import net.coreprotect.utility.Teleport;
