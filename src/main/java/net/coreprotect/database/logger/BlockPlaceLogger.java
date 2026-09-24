@@ -1,7 +1,6 @@
 package net.coreprotect.database.logger;
 
 import java.util.List;
-import java.util.Locale;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -20,6 +19,7 @@ import net.coreprotect.event.CoreProtectPreLogEvent;
 import net.coreprotect.model.action.LookupActions;
 import net.coreprotect.thread.CacheHandler;
 import net.coreprotect.utility.BlockTypeUtils;
+import net.coreprotect.utility.EntityUtils;
 import net.coreprotect.utility.MaterialUtils;
 import net.coreprotect.utility.WorldUtils;
 
@@ -42,7 +42,7 @@ public class BlockPlaceLogger {
             int data = 0;
             if (forceType != null && force) {
                 type = forceType;
-                if (BukkitAdapter.ADAPTER.isItemFrame(type) || type.equals(Material.SPAWNER) || type.equals(Material.PAINTING) || type.equals(Material.SKELETON_SKULL) || type.equals(Material.SKELETON_WALL_SKULL) || type.equals(Material.WITHER_SKELETON_SKULL) || type.equals(Material.WITHER_SKELETON_WALL_SKULL) || type.equals(Material.ZOMBIE_HEAD) || type.equals(Material.ZOMBIE_WALL_HEAD) || type.equals(Material.PLAYER_HEAD) || type.equals(Material.PLAYER_WALL_HEAD) || type.equals(Material.CREEPER_HEAD) || type.equals(Material.CREEPER_WALL_HEAD) || type.equals(Material.DRAGON_HEAD) || type.equals(Material.DRAGON_WALL_HEAD) || type.equals(Material.ARMOR_STAND) || type.equals(Material.END_CRYSTAL)) {
+                if (BukkitAdapter.ADAPTER.isItemFrame(type) || type.equals(Material.SPAWNER) || type.equals(Material.PAINTING) || type.equals(Material.SKELETON_SKULL) || type.equals(Material.SKELETON_WALL_SKULL) || type.equals(Material.WITHER_SKELETON_SKULL) || type.equals(Material.WITHER_SKELETON_WALL_SKULL) || type.equals(Material.ZOMBIE_HEAD) || type.equals(Material.ZOMBIE_WALL_HEAD) || type.equals(Material.PLAYER_HEAD) || type.equals(Material.PLAYER_WALL_HEAD) || type.equals(Material.CREEPER_HEAD) || type.equals(Material.CREEPER_WALL_HEAD) || type.equals(Material.DRAGON_HEAD) || type.equals(Material.DRAGON_WALL_HEAD) || type.equals(Material.ARMOR_STAND) || type.equals(Material.END_CRYSTAL) || EntityUtils.isCushion(type)) {
                     data = forceData; // mob spawner, skull
                 }
                 else if (user.startsWith("#")) {
