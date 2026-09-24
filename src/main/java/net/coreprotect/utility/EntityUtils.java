@@ -2,9 +2,11 @@ package net.coreprotect.utility;
 
 import java.util.Locale;
 
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.material.Colorable;
 
 import net.coreprotect.bukkit.BukkitAdapter;
 import net.coreprotect.config.ConfigHandler;
@@ -61,6 +63,56 @@ public class EntityUtils extends Queue {
         }
 
         return getEntityMaterial(entity.getType());
+    }
+
+    /**
+     * Returns true if the entity is a cushion (Minecraft 26.3+).
+     * Uses name-based checks so this is safe to call on any server version.
+     */
+    public static boolean isCushion(final Entity entity) {
+        return entity != null && entity.getType().name().equals("CUSHION");
+    }
+
+    /**
+     * Returns true if the material is a cushion item (e.g. WHITE_CUSHION, Minecraft 26.3+).
+     */
+    public static boolean isCushion(final Material material) {
+        return material != null && material.name().endsWith("_CUSHION");
+    }
+
+    /**
+     * Gets the cushion material matching the entity's color (e.g. WHITE_CUSHION).
+     * Cushions exist as entities, but are logged against their item materials.
+     */
+    public static Material getCushionMaterial(final Entity entity) {
+        if (!isCushion(entity) || !(entity instanceof Colorable)) {
+            return null;
+        }
+
+        DyeColor color = ((Colorable) entity).getColor();
+        if (color == null) {
+            return Material.getMaterial("WHITE_CUSHION");
+        }
+
+        return Material.getMaterial(color.name() + "_CUSHION");
+    }
+
+    /**
+     * Gets the color of a cushion material (e.g. WHITE_CUSHION -> WHITE).
+     */
+    public static DyeColor getCushionColor(final Material material) {
+        if (!isCushion(material)) {
+            return null;
+        }
+
+        String name = material.name();
+        String colorName = name.substring(0, name.length() - "_CUSHION".length());
+        try {
+            return DyeColor.valueOf(colorName);
+        }
+        catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     public static Material getEntityMaterial(EntityType type) {
